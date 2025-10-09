@@ -1,33 +1,29 @@
 version: 0.2
 
-env:
-  variables:
-    S3_BUCKET: "github-s3-codepipeline-workshop"
-    REGION: "ap-south-1"
-
 phases:
   install:
     commands:
-      - echo "Installing dependencies..."
-      - aws --version
+      - echo "No installation needed for static HTML"
 
   pre_build:
     commands:
-      - echo "Starting build process..."
-      - echo "Website files will be deployed to S3 bucket: $S3_BUCKET"
+      - echo "Preparing build..."
 
   build:
     commands:
-      - echo "Validating and preparing website files..."
-      - echo "Build phase completed successfully."
+      - echo "Building static HTML site"
+      - mkdir -p output
+      # Copy all files to output directory
+      - cp -r * output/ || true
+      # Remove buildspec from artifacts
+      - rm -f output/buildspec.yml
 
   post_build:
     commands:
-      - echo "Build completed on `date`"
-      - echo "Deploying website to S3..."
-      - aws s3 sync . s3://$S3_BUCKET --delete --exclude ".git/*" --exclude "buildspec.yml" --exclude "README.md"
+      - echo "Build complete - $(ls -la output/)"
 
 artifacts:
   files:
     - '**/*'
-  discard-paths: yes
+  base-directory: output
+  discard-paths: no
