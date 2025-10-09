@@ -19,7 +19,6 @@ phases:
   build:
     commands:
       - echo "Validating and preparing website files..."
-      # Optional: You can add HTML/CSS lint or minify steps here
       - echo "Build phase completed successfully."
 
   post_build:
