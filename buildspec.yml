@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    S3_BUCKET: "github-s3-codepipeline-workshop"
+    REGION: "ap-south-1"
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - aws --version
+
+  pre_build:
+    commands:
+      - echo "Starting build process..."
+      - echo "Website files will be deployed to S3 bucket: $S3_BUCKET"
+
+  build:
+    commands:
+      - echo "Validating and preparing website files..."
+      # Optional: You can add HTML/CSS lint or minify steps here
+      - echo "Build phase completed successfully."
+
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+      - echo "Deploying website to S3..."
+      - aws s3 sync . s3://$S3_BUCKET --delete --exclude ".git/*" --exclude "buildspec.yml" --exclude "README.md"
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
