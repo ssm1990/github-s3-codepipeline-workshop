@@ -22,7 +22,6 @@ phases:
     commands:
       - echo "Build complete - $(ls -la output/)"
       - echo "Invalidating CloudFront cache..."
-      - aws cloudfront create-invalidation --distribution-id EJIZ2C3RZ5TBJ --paths "/*"
 
 artifacts:
   files:
